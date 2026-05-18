@@ -771,6 +771,15 @@ const StepsCarousel = ({ onNavigate }) => {
   const prev = () => setIndex(i => (i - 1 + total) % total);
   const next = () => setIndex(i => (i + 1) % total);
   const s = STEPS[index];
+  const touchStart = useRef(null);
+  const handleTouchStart = e => { touchStart.current = e.touches[0].clientX; };
+  const handleTouchEnd = e => {
+    if (touchStart.current === null) return;
+    const diff = touchStart.current - e.changedTouches[0].clientX;
+    if (diff > 50) next();
+    else if (diff < -50) prev();
+    touchStart.current = null;
+  };
 
   const stepColors = ["#2d6a4f","#e76f00","#1b4332","#52b788"];
   const cardMinHeight = isMobile ? 320 : 400;
@@ -784,7 +793,7 @@ const StepsCarousel = ({ onNavigate }) => {
         )}
 
         {/* Main card */}
-        <div style={{flex:1, borderRadius:20, overflow:"hidden", minHeight:cardMinHeight, position:"relative", display:"flex", alignItems:"stretch", background:stepColors[index], flexDirection: isMobile ? "column" : "row"}}>
+        <div onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd} style={{flex:1, borderRadius:20, overflow:"hidden", minHeight:cardMinHeight, position:"relative", display:"flex", alignItems:"stretch", background:stepColors[index], flexDirection: isMobile ? "column" : "row"}}>
           {s.bgImg && (
             <img src={s.bgImg} alt={s.title} style={{position:"absolute",inset:0,width:"100%",height:"100%",objectFit:"cover",objectPosition:"center"}} />
           )}
@@ -836,6 +845,15 @@ const ServicesCarousel = ({ onNavigate }) => {
   const prevS = SERVICES[(index - 1 + total) % total];
   const nextS = SERVICES[(index + 1) % total];
   const cardMinHeight = isMobile ? 320 : 440;
+  const touchStart = useRef(null);
+  const handleTouchStart = e => { touchStart.current = e.touches[0].clientX; };
+  const handleTouchEnd = e => {
+    if (touchStart.current === null) return;
+    const diff = touchStart.current - e.changedTouches[0].clientX;
+    if (diff > 50) next();
+    else if (diff < -50) prev();
+    touchStart.current = null;
+  };
 
   return (
     <div style={{position:"relative", overflow:"hidden"}}>
@@ -848,7 +866,7 @@ const ServicesCarousel = ({ onNavigate }) => {
         )}
 
         {/* Main active card */}
-        <div style={{flex:1, borderRadius:20, overflow:"hidden", position:"relative", minHeight:cardMinHeight, transition:"all 0.4s", background:s.bg, display:"flex", alignItems:"stretch", flexDirection: isMobile ? "column" : "row"}}>
+        <div onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd} style={{flex:1, borderRadius:20, overflow:"hidden", position:"relative", minHeight:cardMinHeight, transition:"all 0.4s", background:s.bg, display:"flex", alignItems:"stretch", flexDirection: isMobile ? "column" : "row"}}>
           {/* Background image if available */}
           {s.bgImg && (
             <img src={s.bgImg} alt={s.title} style={{position:"absolute",inset:0,width:"100%",height:"100%",objectFit:"cover",objectPosition:"left center"}} />
