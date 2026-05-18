@@ -1553,8 +1553,8 @@ export default function App() {
   const [page, setPage] = useState("home");
 
   const navigate = (p) => {
+    window.scrollTo({ top: 0, behavior: "instant" });
     setPage(p);
-    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   const renderPage = () => {
