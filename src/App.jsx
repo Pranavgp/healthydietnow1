@@ -638,6 +638,19 @@ const STEPS = [
 /* ─────────────────────────────────────────────
    REUSABLE COMPONENTS
 ───────────────────────────────────────────── */
+/* ─────────────────────────────────────────────
+   HOOKS
+───────────────────────────────────────────── */
+const useIsMobile = () => {
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 600);
+  useEffect(() => {
+    const handler = () => setIsMobile(window.innerWidth <= 600);
+    window.addEventListener("resize", handler);
+    return () => window.removeEventListener("resize", handler);
+  }, []);
+  return isMobile;
+};
+
 const StatsBanner = () => (
   <div className="stats-bar">
     {[["5 Days","Availability Per Week"],["90%","Faster Response Time"],["500+","Interactions Handled"],["100%","User Satisfaction Rate"]].map(([n,l]) => (
@@ -753,40 +766,54 @@ const Navbar = ({ current, onNavigate }) => {
 // FIX: Removed unused variables `prevS` and `nextS`
 const StepsCarousel = ({ onNavigate }) => {
   const [index, setIndex] = useState(0);
+  const isMobile = useIsMobile();
   const total = STEPS.length;
   const prev = () => setIndex(i => (i - 1 + total) % total);
   const next = () => setIndex(i => (i + 1) % total);
   const s = STEPS[index];
 
   const stepColors = ["#2d6a4f","#e76f00","#1b4332","#52b788"];
+  const cardMinHeight = isMobile ? 320 : 400;
 
   return (
     <div>
       <div style={{display:"flex", alignItems:"stretch", gap:16}}>
         {/* Prev peek */}
-        <div onClick={prev} style={{width:80, flexShrink:0, borderRadius:20, background:stepColors[(index-1+total)%total], opacity:0.7, cursor:"pointer", minHeight:400, display:"flex", alignItems:"center", justifyContent:"center", fontSize:28, color:"#fff", fontWeight:700}}>‹</div>
+        {!isMobile && (
+          <div onClick={prev} style={{width:80, flexShrink:0, borderRadius:20, background:stepColors[(index-1+total)%total], opacity:0.7, cursor:"pointer", minHeight:cardMinHeight, display:"flex", alignItems:"center", justifyContent:"center", fontSize:28, color:"#fff", fontWeight:700}}>‹</div>
+        )}
 
         {/* Main card */}
-        <div style={{flex:1, borderRadius:20, overflow:"hidden", minHeight:400, position:"relative", display:"flex", alignItems:"stretch", background:stepColors[index]}}>
+        <div style={{flex:1, borderRadius:20, overflow:"hidden", minHeight:cardMinHeight, position:"relative", display:"flex", alignItems:"stretch", background:stepColors[index], flexDirection: isMobile ? "column" : "row"}}>
           {s.bgImg && (
             <img src={s.bgImg} alt={s.title} style={{position:"absolute",inset:0,width:"100%",height:"100%",objectFit:"cover",objectPosition:"center"}} />
           )}
           {s.bgImg && <div style={{position:"absolute",inset:0,background:"linear-gradient(90deg,rgba(0,0,0,0.1) 0%,rgba(0,0,0,0.55) 100%)"}} />}
           {/* Left: step number */}
-          <div style={{flex:1, display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", position:"relative", zIndex:1, padding:40}}>
-            <div style={{width:72, height:72, borderRadius:"50%", background:"rgba(255,255,255,0.25)", display:"flex", alignItems:"center", justifyContent:"center", fontFamily:"var(--font-display)", fontSize:32, fontWeight:700, color:"#fff", marginBottom:16, border:"3px solid rgba(255,255,255,0.5)"}}>{s.num}</div>
-            <div style={{fontSize:13, color:"rgba(255,255,255,0.7)", letterSpacing:2, textTransform:"uppercase"}}>Step {s.num} of {total}</div>
-          </div>
+          {!isMobile && (
+            <div style={{flex:1, display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", position:"relative", zIndex:1, padding:40}}>
+              <div style={{width:72, height:72, borderRadius:"50%", background:"rgba(255,255,255,0.25)", display:"flex", alignItems:"center", justifyContent:"center", fontFamily:"var(--font-display)", fontSize:32, fontWeight:700, color:"#fff", marginBottom:16, border:"3px solid rgba(255,255,255,0.5)"}}>{s.num}</div>
+              <div style={{fontSize:13, color:"rgba(255,255,255,0.7)", letterSpacing:2, textTransform:"uppercase"}}>Step {s.num} of {total}</div>
+            </div>
+          )}
           {/* Right: frosted glass */}
-          <div style={{width:"45%", background:"rgba(255,255,255,0.15)", backdropFilter:"blur(16px)", WebkitBackdropFilter:"blur(16px)", padding:"40px 36px", display:"flex", flexDirection:"column", justifyContent:"center", gap:16, position:"relative", zIndex:1}}>
-            <h3 style={{fontFamily:"var(--font-display)", fontSize:30, color:"#fff", lineHeight:1.2}}>{s.title}</h3>
+          <div style={{width: isMobile ? "100%" : "45%", background:"rgba(255,255,255,0.15)", backdropFilter:"blur(16px)", WebkitBackdropFilter:"blur(16px)", padding: isMobile ? "28px 20px" : "40px 36px", display:"flex", flexDirection:"column", justifyContent:"center", gap:16, position:"relative", zIndex:1}}>
+            {isMobile && (
+              <div style={{display:"flex", alignItems:"center", gap:12, marginBottom:4}}>
+                <div style={{width:48, height:48, borderRadius:"50%", background:"rgba(255,255,255,0.25)", display:"flex", alignItems:"center", justifyContent:"center", fontFamily:"var(--font-display)", fontSize:22, fontWeight:700, color:"#fff", border:"2px solid rgba(255,255,255,0.5)", flexShrink:0}}>{s.num}</div>
+                <div style={{fontSize:12, color:"rgba(255,255,255,0.7)", letterSpacing:2, textTransform:"uppercase"}}>Step {s.num} of {total}</div>
+              </div>
+            )}
+            <h3 style={{fontFamily:"var(--font-display)", fontSize: isMobile ? 22 : 30, color:"#fff", lineHeight:1.2}}>{s.title}</h3>
             <p style={{fontSize:15, color:"rgba(255,255,255,0.9)", lineHeight:1.8}}>{s.desc}</p>
             <button className="btn-primary" style={{width:"fit-content", marginTop:8}} onClick={() => onNavigate("contact")}>Start Your Journey →</button>
           </div>
         </div>
 
         {/* Next peek */}
-        <div onClick={next} style={{width:80, flexShrink:0, borderRadius:20, background:stepColors[(index+1)%total], opacity:0.7, cursor:"pointer", minHeight:400, display:"flex", alignItems:"center", justifyContent:"center", fontSize:28, color:"#fff", fontWeight:700}}>›</div>
+        {!isMobile && (
+          <div onClick={next} style={{width:80, flexShrink:0, borderRadius:20, background:stepColors[(index+1)%total], opacity:0.7, cursor:"pointer", minHeight:cardMinHeight, display:"flex", alignItems:"center", justifyContent:"center", fontSize:28, color:"#fff", fontWeight:700}}>›</div>
+        )}
       </div>
 
       <div className="carousel-dots" style={{marginTop:24}}>
@@ -801,23 +828,27 @@ const StepsCarousel = ({ onNavigate }) => {
 // FIX: Removed unused variables `prevS` and `nextS`
 const ServicesCarousel = ({ onNavigate }) => {
   const [index, setIndex] = useState(0);
+  const isMobile = useIsMobile();
   const total = SERVICES.length;
   const prev = () => setIndex(i => (i - 1 + total) % total);
   const next = () => setIndex(i => (i + 1) % total);
   const s = SERVICES[index];
   const prevS = SERVICES[(index - 1 + total) % total];
   const nextS = SERVICES[(index + 1) % total];
+  const cardMinHeight = isMobile ? 320 : 440;
 
   return (
     <div style={{position:"relative", overflow:"hidden"}}>
       <div style={{display:"flex", alignItems:"stretch", gap:16}}>
         {/* Prev card peek */}
-        <div className="carousel-peek" style={{width:80, flexShrink:0, borderRadius:20, background:prevS.bg, opacity:0.7, cursor:"pointer", minHeight:440, display:"flex", alignItems:"center", justifyContent:"center", fontSize:36, transition:"all 0.4s"}} onClick={prev}>
-          ‹
-        </div>
+        {!isMobile && (
+          <div className="carousel-peek" style={{width:80, flexShrink:0, borderRadius:20, background:prevS.bg, opacity:0.7, cursor:"pointer", minHeight:cardMinHeight, display:"flex", alignItems:"center", justifyContent:"center", fontSize:36, transition:"all 0.4s"}} onClick={prev}>
+            ‹
+          </div>
+        )}
 
         {/* Main active card */}
-        <div style={{flex:1, borderRadius:20, overflow:"hidden", position:"relative", minHeight:440, transition:"all 0.4s", background:s.bg, display:"flex", alignItems:"stretch"}}>
+        <div style={{flex:1, borderRadius:20, overflow:"hidden", position:"relative", minHeight:cardMinHeight, transition:"all 0.4s", background:s.bg, display:"flex", alignItems:"stretch", flexDirection: isMobile ? "column" : "row"}}>
           {/* Background image if available */}
           {s.bgImg && (
             <img src={s.bgImg} alt={s.title} style={{position:"absolute",inset:0,width:"100%",height:"100%",objectFit:"cover",objectPosition:"left center"}} />
@@ -826,22 +857,26 @@ const ServicesCarousel = ({ onNavigate }) => {
           {s.bgImg && (
             <div style={{position:"absolute",inset:0,background:"linear-gradient(90deg, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.05) 50%, rgba(0,0,0,0.55) 100%)"}} />
           )}
-          {/* Left: big emoji/visual area */}
-          <div style={{flex:1, display:"flex", alignItems:"center", justifyContent:"center", fontSize:120, padding:40, background: s.bgImg ? "transparent" : "rgba(0,0,0,0.08)", position:"relative", zIndex:1}}>
-            {!s.bgImg && s.emoji}
-          </div>
+          {/* Left: big emoji/visual area — hide on mobile when there's a bg image */}
+          {!isMobile && (
+            <div style={{flex:1, display:"flex", alignItems:"center", justifyContent:"center", fontSize:120, padding:40, background: s.bgImg ? "transparent" : "rgba(0,0,0,0.08)", position:"relative", zIndex:1}}>
+              {!s.bgImg && s.emoji}
+            </div>
+          )}
           {/* Right: frosted glass card */}
-          <div style={{width:"45%", background:"rgba(255,255,255,0.18)", backdropFilter:"blur(16px)", WebkitBackdropFilter:"blur(16px)", padding:"40px 36px", display:"flex", flexDirection:"column", justifyContent:"center", gap:20, position:"relative", zIndex:1}}>
-            <h3 style={{fontFamily:"var(--font-display)", fontSize:30, color:"#fff", lineHeight:1.2}}>{s.title}</h3>
+          <div style={{width: isMobile ? "100%" : "45%", background:"rgba(255,255,255,0.18)", backdropFilter:"blur(16px)", WebkitBackdropFilter:"blur(16px)", padding: isMobile ? "28px 20px" : "40px 36px", display:"flex", flexDirection:"column", justifyContent:"center", gap:20, position:"relative", zIndex:1}}>
+            <h3 style={{fontFamily:"var(--font-display)", fontSize: isMobile ? 22 : 30, color:"#fff", lineHeight:1.2}}>{s.title}</h3>
             <p style={{fontSize:15, color:"rgba(255,255,255,0.9)", lineHeight:1.8}}>{s.desc}</p>
             <button className="btn-primary" style={{width:"fit-content", background:"rgba(231,111,0,0.9)"}} onClick={() => onNavigate(s.page)}>View Service</button>
           </div>
         </div>
 
         {/* Next card peek */}
-        <div className="carousel-peek" style={{width:80, flexShrink:0, borderRadius:20, background:nextS.bg, opacity:0.7, cursor:"pointer", minHeight:440, display:"flex", alignItems:"center", justifyContent:"center", fontSize:36, transition:"all 0.4s"}} onClick={next}>
-          ›
-        </div>
+        {!isMobile && (
+          <div className="carousel-peek" style={{width:80, flexShrink:0, borderRadius:20, background:nextS.bg, opacity:0.7, cursor:"pointer", minHeight:cardMinHeight, display:"flex", alignItems:"center", justifyContent:"center", fontSize:36, transition:"all 0.4s"}} onClick={next}>
+            ›
+          </div>
+        )}
       </div>
 
       {/* Dots */}
@@ -856,14 +891,16 @@ const ServicesCarousel = ({ onNavigate }) => {
 
 const BlogCarousel = ({ onNavigate }) => {
   const [index, setIndex] = useState(0);
+  const isMobile = useIsMobile();
   const total = BLOGS.length;
   const prev = () => setIndex(i => (i - 1 + total) % total);
   const next = () => setIndex(i => (i + 1) % total);
-  const visible = [0, 1, 2].map(offset => BLOGS[(index + offset) % total]);
+  const visibleCount = isMobile ? 1 : 3;
+  const visible = Array.from({length: visibleCount}, (_, offset) => BLOGS[(index + offset) % total]);
 
   return (
     <div>
-      <div style={{display:"grid", gridTemplateColumns:"1fr 1fr 1fr", gap:"24px", alignItems:"stretch"}}>
+      <div style={{display:"grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr 1fr", gap:"24px", alignItems:"stretch"}}>
         {visible.map((b, i) => (
           <div key={b.title + i} className="card" style={{cursor:"pointer", display:"flex", flexDirection:"column"}} onClick={() => onNavigate("blog-detail")}>
             <div style={{width:"100%", aspectRatio:"16/10", overflow:"hidden", borderRadius:"var(--radius) var(--radius) 0 0"}}>
@@ -893,22 +930,25 @@ const BlogCarousel = ({ onNavigate }) => {
 
 const TestimonialCarousel = ({ items = TESTIMONIALS }) => {
   const [index, setIndex] = useState(0);
+  const isMobile = useIsMobile();
   const total = items.length;
   const prev = () => setIndex(i => (i - 1 + total) % total);
   const next = () => setIndex(i => (i + 1) % total);
-  const visible = [0, 1, 2].map(offset => items[(index + offset) % total]);
+  const visible = isMobile
+    ? [items[index % total]]
+    : [0, 1, 2].map(offset => items[(index + offset) % total]);
 
   return (
     <div>
       <div style={{display:"flex", gap:"20px", alignItems:"stretch", overflow:"hidden"}}>
         {visible.map((t, i) => (
           <div key={t.name + i} className="card" style={{
-            minWidth: i < 2 ? "calc(50% - 10px)" : "120px",
-            maxWidth: i < 2 ? "calc(50% - 10px)" : "120px",
+            minWidth: isMobile ? "100%" : (i < 2 ? "calc(50% - 10px)" : "120px"),
+            maxWidth: isMobile ? "100%" : (i < 2 ? "calc(50% - 10px)" : "120px"),
             flexShrink:0,
             padding:"28px 24px",
             display:"flex", flexDirection:"column",
-            opacity: i === 2 ? 0.4 : 1,
+            opacity: (!isMobile && i === 2) ? 0.4 : 1,
             overflow:"hidden",
             border:"2px solid var(--gray-200)",
             boxShadow:"0 4px 20px rgba(0,0,0,0.08)",
@@ -955,52 +995,89 @@ const TestimonialCarousel = ({ items = TESTIMONIALS }) => {
 ───────────────────────────────────────────── */
 
 /* HOME */
-const HomePage = ({ onNavigate }) => (
+const HomePage = ({ onNavigate }) => {
+  const isMobile = useIsMobile();
+  return (
   <div>
     {/* Hero */}
-    <section className="hero-section" style={{
-      minHeight:"88vh",
-      display:"flex",
-      alignItems:"center",
-      position:"relative",
-      overflow:"hidden",
-      background:"#ffffff",
-    }}>
-      {/* Background image — full cover, bright */}
-      <img
-        className="hero-bg-img"
-        src={IMG_VAR_23}
-        alt="Hero"
-        style={{
-          position:"absolute",
-          top:0, left:0,
-          width:"100%",
-          height:"100%",
-          objectFit:"cover",
-          objectPosition:"right center",
-          filter:"brightness(1.05)",
-        }}
-      />
-      {/* Very light white fade only on far left to keep text readable */}
-      <div className="hero-overlay" style={{
-        position:"absolute", inset:0,
-        background:"linear-gradient(90deg, rgba(255,255,255,0.96) 0%, rgba(255,255,255,0.88) 30%, rgba(255,255,255,0.4) 50%, rgba(255,255,255,0.0) 68%)",
-      }} />
-      {/* Content — pushed to left */}
-      <div className="hero-content" style={{position:"relative",zIndex:2,paddingLeft:"5%"}}>
-        <div className="hero-content-inner" style={{maxWidth:480}}>
-          <div className="animate-fadeUp">
-            <div className="section-label">Shalini's Nutrition Plan</div>
-            <h1 className="hero-title">Fuel Your Body <span>the Right Way</span></h1>
-            <p className="hero-subtitle">Science-backed, personalised nutrition plans designed around your unique body, goals, and Indian lifestyle.</p>
-            <div style={{display:"flex",gap:"16px",flexWrap:"wrap"}}>
-              <button className="btn-primary" onClick={() => onNavigate("contact")}>Start Your Journey →</button>
-              <button className="btn-outline" onClick={() => onNavigate("about")}>Meet Shalini</button>
+    {isMobile ? (
+      /* Mobile hero: image on top, text below */
+      <section className="hero-section" style={{
+        background:"#ffffff",
+        overflow:"hidden",
+      }}>
+        <img
+          className="hero-bg-img"
+          src={IMG_VAR_23}
+          alt="Hero"
+          style={{
+            width:"100%",
+            height:260,
+            objectFit:"cover",
+            objectPosition:"center top",
+            display:"block",
+          }}
+        />
+        <div className="hero-content" style={{padding:"32px 20px 40px", background:"#ffffff"}}>
+          <div className="hero-content-inner" style={{maxWidth:"100%"}}>
+            <div className="animate-fadeUp">
+              <div className="section-label">Shalini's Nutrition Plan</div>
+              <h1 className="hero-title" style={{fontSize:28}}>Fuel Your Body <span>the Right Way</span></h1>
+              <p className="hero-subtitle" style={{fontSize:15}}>Science-backed, personalised nutrition plans designed around your unique body, goals, and Indian lifestyle.</p>
+              <div style={{display:"flex",gap:"12px",flexWrap:"wrap"}}>
+                <button className="btn-primary" onClick={() => onNavigate("contact")}>Start Your Journey →</button>
+                <button className="btn-outline" onClick={() => onNavigate("about")}>Meet Shalini</button>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
+    ) : (
+      /* Desktop hero: full-bleed background image with left overlay */
+      <section className="hero-section" style={{
+        minHeight:"88vh",
+        display:"flex",
+        alignItems:"center",
+        position:"relative",
+        overflow:"hidden",
+        background:"#ffffff",
+      }}>
+        {/* Background image — full cover, bright */}
+        <img
+          className="hero-bg-img"
+          src={IMG_VAR_23}
+          alt="Hero"
+          style={{
+            position:"absolute",
+            top:0, left:0,
+            width:"100%",
+            height:"100%",
+            objectFit:"cover",
+            objectPosition:"right center",
+            filter:"brightness(1.05)",
+          }}
+        />
+        {/* Very light white fade only on far left to keep text readable */}
+        <div className="hero-overlay" style={{
+          position:"absolute", inset:0,
+          background:"linear-gradient(90deg, rgba(255,255,255,0.96) 0%, rgba(255,255,255,0.88) 30%, rgba(255,255,255,0.4) 50%, rgba(255,255,255,0.0) 68%)",
+        }} />
+        {/* Content — pushed to left */}
+        <div className="hero-content" style={{position:"relative",zIndex:2,paddingLeft:"5%"}}>
+          <div className="hero-content-inner" style={{maxWidth:480}}>
+            <div className="animate-fadeUp">
+              <div className="section-label">Shalini's Nutrition Plan</div>
+              <h1 className="hero-title">Fuel Your Body <span>the Right Way</span></h1>
+              <p className="hero-subtitle">Science-backed, personalised nutrition plans designed around your unique body, goals, and Indian lifestyle.</p>
+              <div style={{display:"flex",gap:"16px",flexWrap:"wrap"}}>
+                <button className="btn-primary" onClick={() => onNavigate("contact")}>Start Your Journey →</button>
+                <button className="btn-outline" onClick={() => onNavigate("about")}>Meet Shalini</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    )}
 
     <StatsBanner />
 
@@ -1056,11 +1133,13 @@ const HomePage = ({ onNavigate }) => (
       <CTABanner onNavigate={onNavigate} />
     </section>
   </div>
-);
+  );
+};
 
 /* ABOUT */
 const AboutPage = ({ onNavigate }) => {
   const [tab, setTab] = useState("Vision");
+  const isMobile = useIsMobile();
   const tabContent = {
     Vision: "My vision is a world where every person has access to personalised, science-backed nutrition guidance — helping communities thrive through the simple but powerful act of eating well. I believe that food is medicine, and that sustainable wellness starts with understanding your own body.",
     Mission: "My mission is to empower individuals with practical, culturally-relevant nutrition knowledge and personalised plans that fit seamlessly into their lives. I combine the latest nutritional science with a deep understanding of Indian food culture to deliver results that are both effective and enjoyable.",
@@ -1080,9 +1159,9 @@ const AboutPage = ({ onNavigate }) => {
       <section className="section">
         <div className="container">
           {/* Single card wrapping photo + text side by side, exactly like the screenshot */}
-          <div className="card animate-fadeUp about-card-inner" style={{display:"flex", alignItems:"stretch", gap:0, overflow:"hidden", padding:0, maxWidth:1100, margin:"0 auto"}}>
+          <div className="card animate-fadeUp about-card-inner" style={{display:"flex", flexDirection: isMobile ? "column" : "row", alignItems:"stretch", gap:0, overflow:"hidden", padding:0, maxWidth:1100, margin:"0 auto"}}>
             {/* Photo side */}
-            <div className="about-card-photo" style={{flexShrink:0, width:"35%", minHeight:480, background:"#e8e0d8", position:"relative", overflow:"hidden"}}>
+            <div className="about-card-photo" style={{flexShrink:0, width: isMobile ? "100%" : "35%", minHeight: isMobile ? 260 : 480, background:"#e8e0d8", position:"relative", overflow:"hidden"}}>
               {/* Replace the src below with Shalini's actual photo URL once available */}
               <img
                 src={aboutImg}
@@ -1091,7 +1170,7 @@ const AboutPage = ({ onNavigate }) => {
               />
             </div>
             {/* Text side */}
-            <div style={{flex:1, padding:"48px 52px", display:"flex", flexDirection:"column", justifyContent:"center"}}>
+            <div style={{flex:1, padding: isMobile ? "24px 20px" : "48px 52px", display:"flex", flexDirection:"column", justifyContent:"center"}}>
               <h2 style={{fontFamily:"var(--font-display)", fontSize:26, color:"var(--green)", marginBottom:24}}>About Me</h2>
               <p style={{color:"var(--gray-700)", lineHeight:1.85, marginBottom:20, fontSize:15}}>With over a decade of experience in clinical and community nutrition, I have helped hundreds of clients across India reclaim their health through targeted, personalised dietary strategies. My approach is rooted in understanding you — your lifestyle, preferences, culture, and goals — before crafting any plan.</p>
               <p style={{color:"var(--gray-700)", lineHeight:1.85, marginBottom:36, fontSize:15}}>I combine cutting-edge nutritional science with a deep respect for Indian food traditions — because sustainable change must fit your real life, not the other way around. Whether you're managing a health condition or simply striving to feel your best, I'm here to guide every step.</p>
@@ -1116,14 +1195,14 @@ const AboutPage = ({ onNavigate }) => {
               <div key={t} className={`about-tab${tab===t?" active":""}`} onClick={() => setTab(t)}>{t}</div>
             ))}
           </div>
-          <div className="philosophy-row" style={{display:"flex", alignItems:"flex-start", gap:60, marginTop:40}}>
+          <div className="philosophy-row" style={{display:"flex", flexDirection: isMobile ? "column" : "row", alignItems:"flex-start", gap: isMobile ? 24 : 60, marginTop:40}}>
             {/* Left: text */}
             <div style={{flex:1}}>
               <h3 style={{color:"var(--green)", fontFamily:"var(--font-display)", fontSize:22, marginBottom:20}}>My {tab}</h3>
               <p style={{color:"var(--gray-700)", lineHeight:1.85, fontSize:15, marginBottom:20}}>{tabContent[tab]}</p>
             </div>
             {/* Right: image (only Vision tab has one, others keep layout balanced) */}
-            <div className="philosophy-img" style={{flexShrink:0, width:"45%"}}>
+            <div className="philosophy-img" style={{flexShrink:0, width: isMobile ? "100%" : "45%"}}>
               {{"Vision":visionImg,"Mission":missionImg,"Purpose":purposeImg}[tab] && (
                 <img
                   src={{"Vision":visionImg,"Mission":missionImg,"Purpose":purposeImg}[tab]}
@@ -1154,7 +1233,9 @@ const AboutPage = ({ onNavigate }) => {
 };
 
 /* SERVICE PAGE (reusable) */
-const ServicePage = ({ service, onNavigate }) => (
+const ServicePage = ({ service, onNavigate }) => {
+  const isMobile = useIsMobile();
+  return (
   <div>
     <div className="page-hero" style={{backgroundImage:`url(${service.bgImg})`, backgroundSize:"cover", backgroundPosition:"center", position:"relative"}}>
       <div style={{position:"absolute",inset:0,background:"linear-gradient(to right, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.35) 60%, rgba(0,0,0,0.1) 100%)"}} />
@@ -1175,7 +1256,7 @@ const ServicePage = ({ service, onNavigate }) => (
           <p style={{color:"var(--gray-700)",lineHeight:1.85,marginBottom:40,fontSize:16}}>
             Following the initial assessment, you will receive a personalised plan complete with detailed guidance, easy-to-follow recipes, meal timing recommendations, and supplement advice where appropriate. Ongoing support ensures you stay on track and see real, measurable results.
           </p>
-          <div className="services-grid" style={{marginBottom:48}}>
+          <div className="services-grid" style={{marginBottom:48, gridTemplateColumns: isMobile ? "1fr" : undefined}}>
             {["Comprehensive Health Assessment","Personalised Action Plan","Ongoing Monitoring & Support"].map((item,i) => (
               <div className="card service-card" key={item} style={{padding:0, overflow:"hidden"}}>
                 <img className="service-icon" src={SERVICES[i].bgImg} alt={item} style={{marginBottom:0}} />
@@ -1216,7 +1297,8 @@ const ServicePage = ({ service, onNavigate }) => (
       <CTABanner onNavigate={onNavigate} />
     </section>
   </div>
-);
+  );
+};
 
 /* TESTIMONIALS */
 const TestimonialsPage = ({ onNavigate }) => (
