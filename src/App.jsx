@@ -499,6 +499,11 @@ const GlobalStyle = () => (
       .hero-grid { grid-template-columns: 1fr; gap: 24px; }
       .hero-img { max-height: 280px; }
       .hero-title { font-size: 32px; }
+      .hero-section { min-height: 100vh !important; align-items: flex-end !important; padding-bottom: 48px; }
+      .hero-overlay { background: linear-gradient(to bottom, rgba(255,255,255,0.97) 0%, rgba(255,255,255,0.92) 50%, rgba(255,255,255,0.2) 100%) !important; }
+      .hero-bg-img { object-position: center top !important; }
+      .hero-content { padding-left: 0 !important; padding: 0 20px !important; }
+      .hero-content-inner { max-width: 100% !important; }
 
       /* About card */
       .about-card-inner { flex-direction: column !important; }
@@ -953,7 +958,7 @@ const TestimonialCarousel = ({ items = TESTIMONIALS }) => {
 const HomePage = ({ onNavigate }) => (
   <div>
     {/* Hero */}
-    <section style={{
+    <section className="hero-section" style={{
       minHeight:"88vh",
       display:"flex",
       alignItems:"center",
@@ -963,6 +968,7 @@ const HomePage = ({ onNavigate }) => (
     }}>
       {/* Background image — full cover, bright */}
       <img
+        className="hero-bg-img"
         src={IMG_VAR_23}
         alt="Hero"
         style={{
@@ -976,13 +982,13 @@ const HomePage = ({ onNavigate }) => (
         }}
       />
       {/* Very light white fade only on far left to keep text readable */}
-      <div style={{
+      <div className="hero-overlay" style={{
         position:"absolute", inset:0,
         background:"linear-gradient(90deg, rgba(255,255,255,0.96) 0%, rgba(255,255,255,0.88) 30%, rgba(255,255,255,0.4) 50%, rgba(255,255,255,0.0) 68%)",
       }} />
       {/* Content — pushed to left */}
-      <div style={{position:"relative",zIndex:2,paddingLeft:"5%"}}>
-        <div style={{maxWidth:480}}>
+      <div className="hero-content" style={{position:"relative",zIndex:2,paddingLeft:"5%"}}>
+        <div className="hero-content-inner" style={{maxWidth:480}}>
           <div className="animate-fadeUp">
             <div className="section-label">Shalini's Nutrition Plan</div>
             <h1 className="hero-title">Fuel Your Body <span>the Right Way</span></h1>
