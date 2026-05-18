@@ -485,6 +485,47 @@ const GlobalStyle = () => (
       .stats-bar { grid-template-columns: repeat(2,1fr); }
       .form-row { grid-template-columns: 1fr; }
       .nav-links { gap: 16px; }
+      .section { padding: 48px 0; }
+      .container { padding: 0 16px; }
+      .page-hero { padding: 52px 0 40px; }
+      .page-hero h1 { font-size: 28px; }
+      .section-title { font-size: 22px; }
+
+      /* Nav */
+      .nav-links { display: none !important; }
+      .hamburger { display: flex !important; }
+
+      /* Hero */
+      .hero-grid { grid-template-columns: 1fr; gap: 24px; }
+      .hero-img { max-height: 280px; }
+      .hero-title { font-size: 32px; }
+
+      /* About card */
+      .about-card-inner { flex-direction: column !important; }
+      .about-card-photo { width: 100% !important; min-height: 260px !important; }
+
+      /* Vision/Mission/Purpose */
+      .about-tabs { justify-content: center; }
+      .philosophy-row { flex-direction: column !important; gap: 24px !important; }
+      .philosophy-img { width: 100% !important; }
+
+      /* Service page includes */
+      .service-includes-row { flex-direction: column !important; gap: 24px !important; }
+      .service-includes-img { width: 100% !important; }
+
+      /* Carousel peek cards */
+      .carousel-peek { display: none !important; }
+
+      /* CTA */
+      .cta-banner { padding: 36px 24px !important; }
+      .cta-banner-text { max-width: 100% !important; }
+      .cta-banner-text h2 { font-size: 22px !important; }
+
+      /* Stats */
+      .stats-bar { grid-template-columns: 1fr 1fr; gap: 16px; }
+
+      /* Testimonial carousel */
+      .testimonial-peek { display: none !important; }
     }
   `}</style>
 );
@@ -668,6 +709,7 @@ const Footer = ({ onNavigate }) => (
 );
 
 const Navbar = ({ current, onNavigate }) => {
+  const [menuOpen, setMenuOpen] = useState(false);
   const links = [["home","Home"],["about","About"],["nutritional-counselling","Services"],["testimonials","Testimonials"],["blog","Blog"]];
   return (
     <nav className="navbar">
@@ -676,13 +718,29 @@ const Navbar = ({ current, onNavigate }) => {
           HEALTHY DIET NOW
           <span>Shalini's Nutrition Plan</span>
         </div>
+        {/* Desktop links */}
         <div className="nav-links">
           {links.map(([p,l]) => (
             <span key={p} className={`nav-link${current===p?" active":""}`} onClick={() => onNavigate(p)}>{l}</span>
           ))}
-          <button className="btn-primary" style={{padding:"10px 22px",fontSize:"14px"}} onClick={() => onNavigate("contact")}>Book A Consultation →</button>
+          <button className="btn-primary nav-cta" style={{padding:"10px 22px",fontSize:"14px"}} onClick={() => onNavigate("contact")}>Book A Consultation →</button>
         </div>
+        {/* Hamburger */}
+        <button onClick={() => setMenuOpen(o => !o)} style={{display:"none", background:"none", border:"none", cursor:"pointer", padding:8, flexDirection:"column", gap:5}} className="hamburger">
+          <span style={{display:"block", width:24, height:2, background:"var(--green-dark)", borderRadius:2}} />
+          <span style={{display:"block", width:24, height:2, background:"var(--green-dark)", borderRadius:2}} />
+          <span style={{display:"block", width:24, height:2, background:"var(--green-dark)", borderRadius:2}} />
+        </button>
       </div>
+      {/* Mobile menu */}
+      {menuOpen && (
+        <div style={{background:"#fff", borderTop:"1px solid var(--gray-200)", padding:"16px 24px", display:"flex", flexDirection:"column", gap:16}}>
+          {links.map(([p,l]) => (
+            <span key={p} className={`nav-link${current===p?" active":""}`} onClick={() => { onNavigate(p); setMenuOpen(false); }} style={{fontSize:16, fontWeight:500}}>{l}</span>
+          ))}
+          <button className="btn-primary" style={{width:"100%", justifyContent:"center"}} onClick={() => { onNavigate("contact"); setMenuOpen(false); }}>Book A Consultation →</button>
+        </div>
+      )}
     </nav>
   );
 };
@@ -749,7 +807,7 @@ const ServicesCarousel = ({ onNavigate }) => {
     <div style={{position:"relative", overflow:"hidden"}}>
       <div style={{display:"flex", alignItems:"stretch", gap:16}}>
         {/* Prev card peek */}
-        <div style={{width:80, flexShrink:0, borderRadius:20, background:prevS.bg, opacity:0.7, cursor:"pointer", minHeight:440, display:"flex", alignItems:"center", justifyContent:"center", fontSize:36, transition:"all 0.4s"}} onClick={prev}>
+        <div className="carousel-peek" style={{width:80, flexShrink:0, borderRadius:20, background:prevS.bg, opacity:0.7, cursor:"pointer", minHeight:440, display:"flex", alignItems:"center", justifyContent:"center", fontSize:36, transition:"all 0.4s"}} onClick={prev}>
           ‹
         </div>
 
@@ -776,7 +834,7 @@ const ServicesCarousel = ({ onNavigate }) => {
         </div>
 
         {/* Next card peek */}
-        <div style={{width:80, flexShrink:0, borderRadius:20, background:nextS.bg, opacity:0.7, cursor:"pointer", minHeight:440, display:"flex", alignItems:"center", justifyContent:"center", fontSize:36, transition:"all 0.4s"}} onClick={next}>
+        <div className="carousel-peek" style={{width:80, flexShrink:0, borderRadius:20, background:nextS.bg, opacity:0.7, cursor:"pointer", minHeight:440, display:"flex", alignItems:"center", justifyContent:"center", fontSize:36, transition:"all 0.4s"}} onClick={next}>
           ›
         </div>
       </div>
@@ -1016,9 +1074,9 @@ const AboutPage = ({ onNavigate }) => {
       <section className="section">
         <div className="container">
           {/* Single card wrapping photo + text side by side, exactly like the screenshot */}
-          <div className="card animate-fadeUp" style={{display:"flex", alignItems:"stretch", gap:0, overflow:"hidden", padding:0, maxWidth:1100, margin:"0 auto"}}>
+          <div className="card animate-fadeUp about-card-inner" style={{display:"flex", alignItems:"stretch", gap:0, overflow:"hidden", padding:0, maxWidth:1100, margin:"0 auto"}}>
             {/* Photo side */}
-            <div style={{flexShrink:0, width:"35%", minHeight:480, background:"#e8e0d8", position:"relative", overflow:"hidden"}}>
+            <div className="about-card-photo" style={{flexShrink:0, width:"35%", minHeight:480, background:"#e8e0d8", position:"relative", overflow:"hidden"}}>
               {/* Replace the src below with Shalini's actual photo URL once available */}
               <img
                 src={aboutImg}
@@ -1052,14 +1110,14 @@ const AboutPage = ({ onNavigate }) => {
               <div key={t} className={`about-tab${tab===t?" active":""}`} onClick={() => setTab(t)}>{t}</div>
             ))}
           </div>
-          <div style={{display:"flex", alignItems:"flex-start", gap:60, marginTop:40}}>
+          <div className="philosophy-row" style={{display:"flex", alignItems:"flex-start", gap:60, marginTop:40}}>
             {/* Left: text */}
             <div style={{flex:1}}>
               <h3 style={{color:"var(--green)", fontFamily:"var(--font-display)", fontSize:22, marginBottom:20}}>My {tab}</h3>
               <p style={{color:"var(--gray-700)", lineHeight:1.85, fontSize:15, marginBottom:20}}>{tabContent[tab]}</p>
             </div>
             {/* Right: image (only Vision tab has one, others keep layout balanced) */}
-            <div style={{flexShrink:0, width:"45%"}}>
+            <div className="philosophy-img" style={{flexShrink:0, width:"45%"}}>
               {{"Vision":visionImg,"Mission":missionImg,"Purpose":purposeImg}[tab] && (
                 <img
                   src={{"Vision":visionImg,"Mission":missionImg,"Purpose":purposeImg}[tab]}
