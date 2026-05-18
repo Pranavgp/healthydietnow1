@@ -113,7 +113,7 @@ const GlobalStyle = () => (
       transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
       box-shadow: 0 4px 16px rgba(231,111,0,0.28);
     }
-    .btn-primary:hover { background: var(--orange-light); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(231,111,0,0.35); }
+    @media (hover: hover) { .btn-primary:hover { background: var(--orange-light); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(231,111,0,0.35); } }
 
     .btn-outline {
       display: inline-flex; align-items: center; gap: 8px;
@@ -123,7 +123,7 @@ const GlobalStyle = () => (
       font-size: 15px; font-weight: 600;
       transition: all 0.2s;
     }
-    .btn-outline:hover { background: var(--green); color: #fff; }
+    @media (hover: hover) { .btn-outline:hover { background: var(--green); color: #fff; } }
 
     .section-label {
       font-size: 13px; font-weight: 600; letter-spacing: 2px;
@@ -372,7 +372,7 @@ const GlobalStyle = () => (
       transition: transform 0.2s, box-shadow 0.2s;
       box-shadow: 0 4px 20px rgba(0,0,0,0.15);
     }
-    .btn-white:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(0,0,0,0.2); }
+    @media (hover: hover) { .btn-white:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(0,0,0,0.2); } }
 
     /* Contact form */
     .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; }
