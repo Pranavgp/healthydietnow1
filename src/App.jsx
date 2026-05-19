@@ -574,6 +574,17 @@ const SERVICES = [
     bg: "linear-gradient(135deg, #2d6a4f 0%, #52b788 100%)",
     emoji: "🥦",
     bgImg: IMG_VAR_1,
+    specialties: [
+      "Personalized Nutrition Plan",
+      "Chronic Disease Management",
+      "Sports Nutrition",
+      "Pregnancy & Postpartum Nutrition",
+      "Gut Health & Digestive Disorder Nutrition",
+      "Children & Adolescent Nutrition",
+      "Stress and Emotional Eating Management",
+      "Hormonal Imbalances",
+      "Specialized Diets for Inflammation and Water Retention",
+    ],
   },
   {
     icon: "🍱",
@@ -1271,9 +1282,21 @@ const ServicePage = ({ service, onNavigate }) => {
           <p style={{color:"var(--gray-700)",lineHeight:1.85,marginBottom:20,fontSize:16}}>
             This service begins with a thorough, confidential consultation where we explore your health history, current eating habits, activity levels, lifestyle factors, and wellness goals. No two clients are the same, and our approach reflects that — everything is built around you.
           </p>
-          <p style={{color:"var(--gray-700)",lineHeight:1.85,marginBottom:40,fontSize:16}}>
+          <p style={{color:"var(--gray-700)",lineHeight:1.85,marginBottom:32,fontSize:16}}>
             Following the initial assessment, you will receive a personalised plan complete with detailed guidance, easy-to-follow recipes, meal timing recommendations, and supplement advice where appropriate. Ongoing support ensures you stay on track and see real, measurable results.
           </p>
+          {service.specialties && (
+            <div style={{marginBottom:40}}>
+              <h3 style={{fontFamily:"var(--font-display)", fontSize:20, color:"var(--green-dark)", marginBottom:16}}>Areas We Cover</h3>
+              <ul style={{listStyle:"none", display:"grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap:"10px 24px"}}>
+                {service.specialties.map(s => (
+                  <li key={s} style={{display:"flex", alignItems:"center", gap:10, fontSize:15, color:"var(--gray-700)", padding:"10px 0", borderBottom:"1px solid var(--gray-100)"}}>
+                    <span style={{color:"var(--green)", fontWeight:700, fontSize:18}}>✓</span> {s}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
           <div className="services-grid" style={{marginBottom:48, gridTemplateColumns: isMobile ? "1fr" : undefined}}>
             {["Comprehensive Health Assessment","Personalised Action Plan","Ongoing Monitoring & Support"].map((item,i) => (
               <div className="card service-card" key={item} style={{padding:0, overflow:"hidden"}}>
