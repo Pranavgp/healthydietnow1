@@ -939,7 +939,7 @@ const BlogCarousel = ({ onNavigate }) => {
     <div>
       <div style={{display:"grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr 1fr", gap:"24px", alignItems:"stretch"}}>
         {visible.map((b, i) => (
-          <div key={b.title + i} className="card" style={{cursor:"pointer", display:"flex", flexDirection:"column"}} onClick={() => onNavigate("blog-detail")}>
+          <div key={b.title + i} className="card" style={{cursor:"pointer", display:"flex", flexDirection:"column"}} onClick={() => onNavigate("blog-detail", b)}>
             <div style={{width:"100%", aspectRatio:"16/10", overflow:"hidden", borderRadius:"var(--radius) var(--radius) 0 0"}}>
               <img src={b.img} alt={b.title} style={{width:"100%", height:"100%", objectFit:"cover"}} />
             </div>
@@ -1402,7 +1402,7 @@ const BlogPage = ({ onNavigate }) => (
       <div className="container">
         <div className="blog-grid">
           {[...BLOGS,...BLOGS].slice(0,5).map((b,i) => (
-            <div className="card animate-fadeUp" style={{animationDelay:`${i*0.1}s`,cursor:"pointer"}} key={b.title+i} onClick={() => onNavigate("blog-detail")}>
+            <div className="card animate-fadeUp" style={{animationDelay:`${i*0.1}s`,cursor:"pointer"}} key={b.title+i} onClick={() => onNavigate("blog-detail", b)}>
               <div style={{width:"100%", aspectRatio:"16/10", overflow:"hidden", borderRadius:"var(--radius) var(--radius) 0 0"}}>
                 <img src={b.img} alt={b.title} style={{width:"100%", height:"100%", objectFit:"cover"}} />
               </div>
@@ -1425,18 +1425,18 @@ const BlogPage = ({ onNavigate }) => (
 );
 
 /* BLOG DETAIL */
-const BlogDetailPage = ({ onNavigate }) => (
+const BlogDetailPage = ({ blog, onNavigate }) => (
   <div>
     <section className="section">
       <div className="container">
         <div className="blog-detail-content animate-fadeUp">
           <div className="section-label">Blog</div>
-          <h1 style={{fontFamily:"var(--font-display)",fontSize:"clamp(26px,4vw,44px)",color:"var(--green-dark)",marginBottom:20,lineHeight:1.2}}>10 Superfoods That Boost Your Metabolism Naturally</h1>
-          <p style={{color:"var(--gray-700)",fontSize:16,marginBottom:8}}>April 15, 2026 &nbsp;·&nbsp; 8 Min Read</p>
+          <h1 style={{fontFamily:"var(--font-display)",fontSize:"clamp(26px,4vw,44px)",color:"var(--green-dark)",marginBottom:20,lineHeight:1.2}}>{blog ? blog.title : "10 Superfoods That Boost Your Metabolism Naturally"}</h1>
+          <p style={{color:"var(--gray-700)",fontSize:16,marginBottom:8}}>{blog ? blog.date : "April 15, 2026"} &nbsp;·&nbsp; {blog ? blog.readTime : "8 Min"} Read</p>
           <div style={{display:"flex",gap:12,marginBottom:32}}>
             {["f","in","𝕏","✉"].map(s => <div className="social-link" style={{background:"var(--gray-200)",color:"var(--gray-700)"}} key={s}>{s}</div>)}
           </div>
-          <div className="blog-detail-img" style={{backgroundImage:`url(${BLOG_DETAIL_IMG})`, backgroundSize:"cover", backgroundPosition:"center"}} />
+          <div className="blog-detail-img" style={{backgroundImage:`url(${blog ? blog.img : BLOG_DETAIL_IMG})`, backgroundSize:"cover", backgroundPosition:"center"}} />
 
           <h2>Why Metabolism Matters</h2>
           <p>Your metabolism is the sum of all the chemical reactions that keep your body alive and functioning. While genetics play a role, the foods you eat have a powerful influence on how efficiently your body converts fuel into energy. By making smart dietary choices, you can meaningfully support your metabolic rate and feel more energised throughout the day.</p>
@@ -1582,9 +1582,11 @@ const ContactPage = ({ onNavigate }) => {
 
 export default function App() {
   const [page, setPage] = useState("home");
+  const [selectedBlog, setSelectedBlog] = useState(null);
 
-  const navigate = (p) => {
+  const navigate = (p, blog = null) => {
     window.scrollTo({ top: 0, behavior: "instant" });
+    if (blog) setSelectedBlog(blog);
     setPage(p);
   };
 
@@ -1597,7 +1599,7 @@ export default function App() {
       case "weight-management": return <ServicePage service={SERVICES[2]} onNavigate={navigate} />;
       case "testimonials": return <TestimonialsPage onNavigate={navigate} />;
       case "blog": return <BlogPage onNavigate={navigate} />;
-      case "blog-detail": return <BlogDetailPage onNavigate={navigate} />;
+      case "blog-detail": return <BlogDetailPage blog={selectedBlog} onNavigate={navigate} />;
       case "contact": return <ContactPage onNavigate={navigate} />;
       default: return <HomePage onNavigate={navigate} />;
     }
