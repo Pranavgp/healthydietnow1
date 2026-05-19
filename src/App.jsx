@@ -7,7 +7,13 @@ import steps2Img from "./Steps 2.jpg";
 import steps3Img from "./Steps 3.jpg";
 import steps4Img from "./Steps 4.jpg";
 import testimonialMaleImg from "./Testimonial.jpg";
-import testimonialFemaleImg from "./Testimonial 1.jpg";
+import testimonial1Img from "./Testimonial 1.jpg";
+import testimonial2Img from "./Testimonial 2.jpg";
+import testimonial3Img from "./Testimonial 3.jpg";
+import testimonial4Img from "./Testimonial 4.jpg";
+import testimonial5Img from "./Testimonial 5.jpg";
+import testimonial6Img from "./Testimonial 6.jpg";
+import testimonial7Img from "./Testimonial 7.jpg";
 import aboutImg from "./About.jpg";
 import aboutBannerImg from "./About Us Banner.jpg";
 import visionImg from "./Vision.jpg";
@@ -545,13 +551,13 @@ const GlobalStyle = () => (
 const IMG_VAR_1  = service1Img;
 const IMG_VAR_2  = service2Img;
 const IMG_VAR_3  = service3Img;
-const IMG_VAR_4  = testimonialMaleImg;
-const IMG_VAR_5  = testimonialFemaleImg;
-const IMG_VAR_6  = testimonialFemaleImg;
-const IMG_VAR_7  = testimonialFemaleImg;
-const IMG_VAR_8  = testimonialFemaleImg;
-const IMG_VAR_9  = testimonialFemaleImg;
-const IMG_VAR_10 = testimonialMaleImg;
+const IMG_VAR_4  = testimonialMaleImg;   // Ajesh (male)
+const IMG_VAR_5  = testimonial2Img;      // Mamta (female)
+const IMG_VAR_6  = testimonial3Img;      // Tanu (female)
+const IMG_VAR_7  = testimonial4Img;      // Khanak (female)
+const IMG_VAR_8  = testimonial7Img;      // Tanuja (female)
+const IMG_VAR_9  = testimonial2Img;      // Neha (female - reuse)
+const IMG_VAR_10 = testimonial1Img;      // Harsha (male)
 const IMG_VAR_11 = blog1Img;
 const IMG_VAR_12 = blog2Img;
 const IMG_VAR_13 = blog3Img;
