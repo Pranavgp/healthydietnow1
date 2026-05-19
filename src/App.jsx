@@ -584,6 +584,8 @@ const SERVICES = [
       "Stress and Emotional Eating Management",
       "Hormonal Imbalances",
       "Specialized Diets for Inflammation and Water Retention",
+      "PCOS Management",
+      "PCOD Management",
     ],
   },
   {
