@@ -21,6 +21,7 @@ import missionImg from "./pngtree-a-banner-with-vegetables-and-fruits-splashing-
 import purposeImg from "./iStock-1459132270-696x464.jpg";
 import successImg from "./ChatGPT Image May 19, 2026, 12_45_09 AM.png";
 import blogBannerImg from "./blog.png";
+import component45Img from "./Component 45.png";
 import blog1Img from "./Blog 1.jpg";
 import blog2Img from "./Blog 2.jpg";
 import blog3Img from "./Blog 3.jpg";
@@ -631,7 +632,7 @@ const BLOG_IMG_4 = IMG_VAR_14;
 const BLOG_IMG_5 = IMG_VAR_15;
 
 const BLOGS = [
-  { date: "Dec 8, 2025", readTime: "8 Min", title: "10 Superfoods That Boost Your Metabolism Naturally", excerpt: "Discover the power-packed foods that can rev up your metabolism and help you achieve your health goals faster.", img: BLOG_IMG_4 },
+  { date: "Dec 8, 2025", readTime: "8 Min", title: "10 Superfoods That Boost Your Metabolism Naturally", excerpt: "Discover the power-packed foods that can rev up your metabolism and help you achieve your health goals faster.", img: component45Img },
   { date: "Dec 5, 2025", readTime: "6 Min", title: "The Truth About Intermittent Fasting for Indians", excerpt: "Intermittent fasting is trending — but is it right for you? We break down what the science says and how to adapt it to Indian eating habits.", img: BLOG_IMG_5 },
   { date: "Nov 28, 2025", readTime: "10 Min", title: "Managing PCOS Through Diet: A Complete Guide", excerpt: "Polycystic ovary syndrome affects 1 in 5 Indian women. Learn how targeted nutrition changes can dramatically improve your symptoms.", img: BLOG_IMG_3 },
   { date: "Nov 20, 2025", readTime: "7 Min", title: "5 Common Myths About Protein That Are Holding You Back", excerpt: "From protein shakes to daily requirements — we bust the most common protein myths and tell you what you really need.", img: BLOG_IMG_4 },
