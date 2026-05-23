@@ -22,6 +22,7 @@ import purposeImg from "./iStock-1459132270-696x464.jpg";
 import successImg from "./ChatGPT Image May 19, 2026, 12_45_09 AM.png";
 import blogBannerImg from "./blog.png";
 import component43Img from "./Component 43.png";
+import component44Img from "./Component 44.png";
 import component45Img from "./Component 45.png";
 import blog1Img from "./Blog 1.jpg";
 import blog2Img from "./Blog 2.jpg";
@@ -637,7 +638,7 @@ const BLOGS = [
   { date: "Dec 5, 2025", readTime: "6 Min", title: "The Truth About Intermittent Fasting for Indians", excerpt: "Intermittent fasting is trending — but is it right for you? We break down what the science says and how to adapt it to Indian eating habits.", img: component43Img },
   { date: "Nov 28, 2025", readTime: "10 Min", title: "Managing PCOS Through Diet: A Complete Guide", excerpt: "Polycystic ovary syndrome affects 1 in 5 Indian women. Learn how targeted nutrition changes can dramatically improve your symptoms.", img: BLOG_IMG_3 },
   { date: "Nov 20, 2025", readTime: "7 Min", title: "5 Common Myths About Protein That Are Holding You Back", excerpt: "From protein shakes to daily requirements — we bust the most common protein myths and tell you what you really need.", img: BLOG_IMG_4 },
-  { date: "Nov 12, 2025", readTime: "5 Min", title: "Seasonal Eating: Why Eating Local & Seasonal Is Best", excerpt: "Rediscover the wisdom of eating with the seasons for better nutrition, lower cost, and a lighter environmental footprint.", img: BLOG_IMG_5 },
+  { date: "Nov 12, 2025", readTime: "5 Min", title: "Seasonal Eating: Why Eating Local & Seasonal Is Best", excerpt: "Rediscover the wisdom of eating with the seasons for better nutrition, lower cost, and a lighter environmental footprint.", img: component44Img },
 ];
 
 const PRICING = [
